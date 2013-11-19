@@ -1,8 +1,6 @@
 {
-
   // Java verticle
-  "main":"com.mycompany.myproject.PingVerticle",
-  //"main":"HelloWorldVerticle",
+  "main":"muraken720.vertx.mod.testexample.BusModVerticle",
   "auto-redeploy": true,
 
   // If your module is going to be registered in the Vert.x module registry you will also need the following
