@@ -10,6 +10,7 @@ import org.vertx.java.platform.Verticle;
 public class BusModVerticle extends Verticle {
 
   public void start() {
+    container.logger().info("BusModVerticle start.");
 
     vertx.eventBus().registerHandler("muraken720.vertx.mod.testexample",
         new Handler<Message<JsonObject>>() {

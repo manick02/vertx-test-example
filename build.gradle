@@ -52,16 +52,21 @@ apply plugin: 'jacoco'
 
 dependencies {
 
-  testCompile 'junit:junit:+'
   testCompile 'org.codehaus.groovy:groovy-all:2.0.8'
   testCompile 'org.spockframework:spock-core:0.7-groovy-2.0'
   testRuntime 'cglib:cglib-nodep:2.2'
   testRuntime 'org.objenesis:objenesis:1.2'
-
+  
   // If you're creating Groovy compiled verticles you may need the following dependencies
   //provided "org.codehaus.groovy:groovy-all:$groovyVersion"
   //provided "io.vertx:lang-groovy:$groovyLangModVersion@jar"
-
+  
+  provided fileTree(dir: 'lib', include: '*.jar')
+  
+  compile "com.netflix.rxjava:rxjava-core:$rxjavaVersion"
+  compile("com.netflix.rxjava:rxjava-groovy:$rxjavaVersion") {
+    exclude group:"org.codehaus.groovy", module:"groovy-all"
+  }
 }
 
 test {

@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.vertx.java.core.AsyncResult;
 import org.vertx.java.core.AsyncResultHandler;
 import org.vertx.java.core.Handler;
+import org.vertx.java.core.eventbus.EventBus;
 import org.vertx.java.core.eventbus.Message;
 import org.vertx.java.core.json.JsonObject;
 import org.vertx.testtools.TestVerticle;
@@ -65,6 +66,53 @@ public class BusModVerticleTest extends TestVerticle {
             assertEquals("unknown action.", json.getString("message"));
 
             testComplete();
+          }
+        });
+  }
+
+  @Test
+  public void testSerialAction() {
+    container.logger().info("in testSerialAction()");
+
+    final EventBus eventBus = vertx.eventBus();
+    final ConcurrentMap<String, String> map = vertx.sharedData().getMap(
+        "muraken720.testexample");
+
+    eventBus.send("muraken720.vertx.mod.testexample",
+        new JsonObject().putString("action", "add").putString("key", "name")
+            .putString("value", "@muraken720"),
+        new Handler<Message<JsonObject>>() {
+          @Override
+          public void handle(Message<JsonObject> reply) {
+            assertEquals("ok", reply.body().getString("status"));
+            assertEquals("@muraken720", map.get("name"));
+
+            eventBus.send(
+                "muraken720.vertx.mod.testexample",
+                new JsonObject().putString("action", "add")
+                    .putString("key", "name").putString("value", "Kenichiro"),
+                new Handler<Message<JsonObject>>() {
+                  @Override
+                  public void handle(Message<JsonObject> reply) {
+                    assertEquals("ok", reply.body().getString("status"));
+                    assertEquals("Kenichiro", map.get("name"));
+
+                    eventBus.send(
+                        "muraken720.vertx.mod.testexample",
+                        new JsonObject().putString("action", "add")
+                            .putString("key", "name")
+                            .putString("value", "Murata"),
+                        new Handler<Message<JsonObject>>() {
+                          @Override
+                          public void handle(Message<JsonObject> reply) {
+                            assertEquals("ok", reply.body().getString("status"));
+                            assertEquals("Murata", map.get("name"));
+
+                            testComplete();
+                          }
+                        });
+                  }
+                });
           }
         });
   }

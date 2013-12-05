@@ -1,7 +1,10 @@
 {
   // Java verticle
-  "main":"muraken720.vertx.mod.testexample.BusModVerticle",
+  // "main":"muraken720.vertx.mod.testexample.BusModVerticle",
+  "main":"muraken720.vertx.mod.testexample.RxBusModVerticle",
   "auto-redeploy": true,
+  
+  "includes":"io.vertx~mod-rxvertx~1.0.0-beta3-SNAPSHOT",
 
   // If your module is going to be registered in the Vert.x module registry you will also need the following
   // mandatory fields
