@@ -154,8 +154,16 @@ public class EventBusIntegrationTest extends TestVerticle {
     Observable<RxMessage<String>> obs2 = rxEventBus.send("foo", "B");
     Observable<RxMessage<String>> obs3 = rxEventBus.send("foo", "C");
     Observable<RxMessage<String>> merged = Observable.merge(obs1, obs2, obs3);
+    
+    merged.takeLast(1).subscribe(new Action1<RxMessage<String>>() {
+      @Override
+      public void call(RxMessage<String> message) {
+        assertEquals("pongC", message.body());
+        testComplete();
+      }
+    });
 
-    assertMessageThenComplete(merged.takeLast(1),"pongC");
+//    assertMessageThenComplete(merged.takeLast(1),"pongC");
 //    assertMessageThenComplete(merged.takeFirst(),"pongA");
     
   }
@@ -184,7 +192,14 @@ public class EventBusIntegrationTest extends TestVerticle {
       }
     });
 
-    RxAssert.assertSequenceThenComplete(result.takeLast(1),"pongApongBpongC");
+    result.takeFirst().subscribe(new Action1<String>() {
+      @Override
+      public void call(String value) {
+        assertEquals("pongApongBpongC", value);
+        testComplete();
+      }
+    });
+//    RxAssert.assertSequenceThenComplete(result.takeLast(1),"pongApongBpongC");
 //    RxAssert.assertSequenceThenComplete(result.takeFirst(),"pongApongBpongC");
   }
 

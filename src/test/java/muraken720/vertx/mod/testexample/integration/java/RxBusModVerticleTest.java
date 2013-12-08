@@ -4,6 +4,7 @@ import static org.vertx.testtools.VertxAssert.assertEquals;
 import static org.vertx.testtools.VertxAssert.assertNotNull;
 import static org.vertx.testtools.VertxAssert.assertTrue;
 import static org.vertx.testtools.VertxAssert.testComplete;
+
 import io.vertx.rxcore.java.eventbus.RxEventBus;
 import io.vertx.rxcore.java.eventbus.RxMessage;
 
